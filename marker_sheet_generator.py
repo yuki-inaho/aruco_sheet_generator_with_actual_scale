@@ -5,14 +5,14 @@ import numpy as np
 # @TODO: use argparse
 N_ROW = 3
 N_COL = 5
-ID_START = 0
-OUTPUT_IMAGE_NAME = "aruco1.png"
+ID_START = 15
+OUTPUT_IMAGE_NAME = "april36h11_15_29.png"
 
 
 PAPER_SIZE_HORISONTAL = 297  # [mm]
 PAPER_SIZE_VERTICAL = 210  # [mm]
 
-MARKER_SIZE = 40  # [mm]
+MARKER_SIZE = 45  # [mm]
 RECT_SIZE = int(1.2 * MARKER_SIZE)
 PATTERN_MARGIN = 2
 CORNER_RECT_SIZE_RATE = 0.1
@@ -22,7 +22,7 @@ ARUCO_DICTIONARY = aruco.getPredefinedDictionary(cv2.aruco.DICT_APRILTAG_36h11)
 
 
 def convert_mm_to_pixel(value_mm, dpi=300):
-    return int(value_mm / 25.4 * dpi)  # value [mm] / 25.4 [mm/inch] * dpi [pixel/inch]
+    return int(np.ceil(value_mm / 25.4 * dpi))  # value [mm] / 25.4 [mm/inch] * dpi [pixel/inch]
 
 
 def paste_aruco_image(back_groud_image, aruco_image, sx, sy):
