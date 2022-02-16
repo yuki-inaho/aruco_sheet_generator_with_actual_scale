@@ -2,16 +2,23 @@ import cv2
 import cv2.aruco as aruco
 import numpy as np
 
+# @TODO: use argparse
+N_ROW = 3
+N_COL = 5
+ID_START = 0
+OUTPUT_IMAGE_NAME = "aruco1.png"
+
 
 PAPER_SIZE_HORISONTAL = 297  # [mm]
 PAPER_SIZE_VERTICAL = 210  # [mm]
 
-MARKER_SIZE = 20  # [mm]
-RECT_SIZE = 2 * MARKER_SIZE
-PATTERN_MARGIN = 3
-CORNER_RECT_SIZE_RATE = 0.2
+MARKER_SIZE = 40  # [mm]
+RECT_SIZE = int(1.2 * MARKER_SIZE)
+PATTERN_MARGIN = 2
+CORNER_RECT_SIZE_RATE = 0.1
 
-ARUCO_DICTIONARY = aruco.getPredefinedDictionary(aruco.DICT_4X4_50)
+# ARUCO_DICTIONARY = aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_1000)
+ARUCO_DICTIONARY = aruco.getPredefinedDictionary(cv2.aruco.DICT_APRILTAG_36h11)
 
 
 def convert_mm_to_pixel(value_mm, dpi=300):
@@ -81,13 +88,14 @@ def draw_aruco_pattern(canvas, aruco_image, marker_start_pos_x, marker_start_pos
     return canvas
 
 
-
-def draw_aruco(pattern_margin, canvas, n_markers_per_row=2, n_markers_per_col=4):
+def draw_aruco(pattern_margin, canvas, n_markers_per_row=2, n_markers_per_col=4, id_start=0):
     """Setup aruco info"""
 
     aruco_size = convert_mm_to_pixel(MARKER_SIZE)
     corner_rect_size = int(aruco_size * CORNER_RECT_SIZE_RATE)
-    aruco_image_list = [aruco.drawMarker(ARUCO_DICTIONARY, id, aruco_size) for id in range(n_markers_per_row * n_markers_per_col)]
+    aruco_image_list = [
+        aruco.drawMarker(ARUCO_DICTIONARY, id, aruco_size) for id in range(id_start, id_start + n_markers_per_row * n_markers_per_col)
+    ]
     rect_size = convert_mm_to_pixel(RECT_SIZE)
 
     """ Setup paper info
@@ -115,35 +123,9 @@ def draw_aruco(pattern_margin, canvas, n_markers_per_row=2, n_markers_per_col=4)
     return canvas
 
 
-"""
-    # TODO: reduce papersize definition line
-    stripe_image = canvas.copy()
-    paper_size_h = convert_mm_to_pixel(PAPER_SIZE_HORISONTAL)
-    paper_size_v = convert_mm_to_pixel(PAPER_SIZE_VERTICAL)
-    paper_size_half_h = paper_size_h // 2
-    paper_size_half_v = paper_size_v // 2
-
-    border_area_size_h = convert_mm_to_pixel(BORDER_AREA_SIZE_HORISONTAL)
-    border_area_size_v = convert_mm_to_pixel(BORDER_AREA_SIZE_VERTICAL)
-    border_area_size_half_h = border_area_size_h // 2
-    border_area_size_half_v = border_area_size_v // 2
-
-    n_stripe = border_area_size_h // border_bold
-    border_start_pos_h = paper_size_half_h - border_area_size_half_h
-    border_start_pos_v = paper_size_half_v - border_area_size_half_v
-    border_end_pos_v = paper_size_half_v + border_area_size_half_v
-
-    for i in range(n_stripe):
-        color_stripe = 0 if i % 2 == 0 else 255
-        current_stripe_start_pos_h = i * border_bold + border_start_pos_h
-        current_stripe_end_pos_h = (i + 1) * border_bold + border_start_pos_h
-        stripe_image[border_start_pos_v:border_end_pos_v, current_stripe_start_pos_h:current_stripe_end_pos_h] = color_stripe
-    return stripe_image
-"""
-
 if __name__ == "__main__":
     """Generate canvas"""
     canvas = generate_canvas_image()
-    aruco_image = draw_aruco(convert_mm_to_pixel(PATTERN_MARGIN), canvas, n_markers_per_row=4, n_markers_per_col=6)
-    cv2.imwrite("aruco.png", aruco_image)
+    aruco_image = draw_aruco(convert_mm_to_pixel(PATTERN_MARGIN), canvas, n_markers_per_row=N_ROW, n_markers_per_col=N_COL, id_start=ID_START)
+    cv2.imwrite(OUTPUT_IMAGE_NAME, aruco_image)
     cv2.waitKey(10)
