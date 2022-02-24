@@ -4,18 +4,18 @@ import numpy as np
 
 # @TODO: use argparse
 N_ROW = 2
-N_COL = 2
-ID_START = 0
-OUTPUT_IMAGE_NAME = "april36h11.png"
+N_COL = 3
+ID_START = 24
+OUTPUT_IMAGE_NAME = "april36h11_24_29.png"
 # ARUCO_DICTIONARY = aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_1000)
-ARUCO_DICTIONARY = aruco.getPredefinedDictionary(cv2.aruco.DICT_APRILTAG_25h9)
+ARUCO_DICTIONARY = aruco.getPredefinedDictionary(cv2.aruco.DICT_APRILTAG_36h11)
 
 PAPER_SIZE_HORISONTAL = 297  # [mm]
 PAPER_SIZE_VERTICAL = 210  # [mm]
 
 MARKER_SIZE = 60  # [mm]
 RECT_SIZE = int(1.2 * MARKER_SIZE)
-PATTERN_MARGIN = 2
+PATTERN_MARGIN = 5
 CORNER_RECT_SIZE_RATE = 0.1
 
 
