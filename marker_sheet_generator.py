@@ -6,7 +6,7 @@ import numpy as np
 N_ROW = 2
 N_COL = 3
 ID_START = 24
-OUTPUT_IMAGE_NAME = "april36h11_24_29.png"
+OUTPUT_IMAGE_NAME = "output/april36h11_24_29.png"
 # ARUCO_DICTIONARY = aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_1000)
 ARUCO_DICTIONARY = aruco.getPredefinedDictionary(cv2.aruco.DICT_APRILTAG_36h11)
 
