@@ -3,22 +3,20 @@ import cv2.aruco as aruco
 import numpy as np
 
 # @TODO: use argparse
-N_ROW = 3
-N_COL = 5
-ID_START = 15
-OUTPUT_IMAGE_NAME = "april36h11_15_29.png"
-
+N_ROW = 2
+N_COL = 2
+ID_START = 0
+OUTPUT_IMAGE_NAME = "april36h11.png"
+# ARUCO_DICTIONARY = aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_1000)
+ARUCO_DICTIONARY = aruco.getPredefinedDictionary(cv2.aruco.DICT_APRILTAG_25h9)
 
 PAPER_SIZE_HORISONTAL = 297  # [mm]
 PAPER_SIZE_VERTICAL = 210  # [mm]
 
-MARKER_SIZE = 45  # [mm]
+MARKER_SIZE = 60  # [mm]
 RECT_SIZE = int(1.2 * MARKER_SIZE)
 PATTERN_MARGIN = 2
 CORNER_RECT_SIZE_RATE = 0.1
-
-# ARUCO_DICTIONARY = aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_1000)
-ARUCO_DICTIONARY = aruco.getPredefinedDictionary(cv2.aruco.DICT_APRILTAG_36h11)
 
 
 def convert_mm_to_pixel(value_mm, dpi=300):
@@ -41,6 +39,8 @@ def generate_canvas_image():
     paper_size_v = convert_mm_to_pixel(PAPER_SIZE_VERTICAL)
     paper_size_half_h = paper_size_h // 2
     paper_size_half_v = paper_size_v // 2
+    paper_size_h = paper_size_half_h * 2
+    paper_size_v = paper_size_half_v * 2
 
     canvas = np.zeros((paper_size_v, paper_size_h), dtype=np.uint8)
     canvas[:] = 255
@@ -70,6 +70,7 @@ def draw_aruco_pattern(canvas, aruco_image, marker_start_pos_x, marker_start_pos
         center_pos_x + aruco_size_h : center_pos_x + aruco_size_h + corner_size,
     ] = 0
 
+    aruco_image = cv2.resize(aruco_image, (aruco_size_h * 2, aruco_size_h * 2), interpolation=cv2.INTER_NEAREST)
     canvas[
         center_pos_y - aruco_size_h : center_pos_y + aruco_size_h,
         center_pos_x - aruco_size_h : center_pos_x + aruco_size_h,
